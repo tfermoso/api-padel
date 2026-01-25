@@ -165,7 +165,7 @@ Para no ejecutar 3 comandos cada vez, usamos `migrate_all.py`, que automatiza:
 **Primera vez (proyecto nuevo):**
 ```bash
 python migrate_all.py "init"
-
+```
 
 
 
