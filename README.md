@@ -157,8 +157,7 @@ Para no ejecutar 3 comandos cada vez, usamos `migrate_all.py`, que automatiza:
 2. `db migrate -m "<mensaje>"`
 3. `db upgrade`
 
----
-
+--
 
 ### Uso
 
@@ -166,7 +165,7 @@ Para no ejecutar 3 comandos cada vez, usamos `migrate_all.py`, que automatiza:
 ```bash
 python migrate_all.py "init"
 ```
-
+---
 
 
 ## 7) Autenticación JWT
