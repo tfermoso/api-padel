@@ -126,34 +126,7 @@ Flask mantiene un registro interno de extensiones en `app.extensions` (un diccio
 ---
 
 ## 6) Base de datos y migraciones
-
-Este proyecto usa **Flask-Migrate (Alembic)** para versionar la BD.
-
-### Primer uso (solo una vez)
-```bash
-# Windows (PowerShell)
-$env:FLASK_APP="run.py"
-flask db init
-```
-
-### Crear migración
-Cada vez que cambies modelos (`models.py`):
-
-```bash
-flask db migrate -m "mensaje"
-```
-
-### Aplicar migraciones
-```bash
-flask db upgrade
-```
-
-> Alternativa multiplataforma (recomendable):
-```bash
-flask --app run.py db upgrade
-```
-
-## Migraciones de base de datos (Flask-Migrate / Alembic)
+Migraciones de base de datos (Flask-Migrate / Alembic)
 
 Este proyecto usa migraciones para **versionar** los cambios del modelo (tablas/columnas/índices) y aplicarlos a la base de datos.
 
@@ -174,7 +147,7 @@ Este proyecto usa migraciones para **versionar** los cambios del modelo (tablas/
 > `db migrate` = generar el “cambio” (como un commit)  
 > `db upgrade` = aplicar el cambio a la BD
 
----
+
 
 ## Script de ayuda: `migrate_all.py`
 
@@ -184,6 +157,9 @@ Para no ejecutar 3 comandos cada vez, usamos `migrate_all.py`, que automatiza:
 2. `db migrate -m "<mensaje>"`
 3. `db upgrade`
 
+---
+
+
 ### Uso
 
 **Primera vez (proyecto nuevo):**
@@ -191,7 +167,7 @@ Para no ejecutar 3 comandos cada vez, usamos `migrate_all.py`, que automatiza:
 python migrate_all.py "init"
 
 
----
+
 
 ## 7) Autenticación JWT
 
