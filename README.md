@@ -153,6 +153,44 @@ flask db upgrade
 flask --app run.py db upgrade
 ```
 
+## Migraciones de base de datos (Flask-Migrate / Alembic)
+
+Este proyecto usa migraciones para **versionar** los cambios del modelo (tablas/columnas/índices) y aplicarlos a la base de datos.
+
+### ¿Qué hace cada comando?
+
+- `flask db init`  
+  Crea la carpeta `migrations/` y los archivos de Alembic. **Solo se ejecuta la primera vez** en un proyecto.
+
+- `flask db migrate -m "mensaje"`  
+  Genera un archivo de migración comparando los modelos (`models.py`) con la base de datos actual.  
+  Guarda el script en `migrations/versions/`.
+
+- `flask db upgrade`  
+  Aplica las migraciones pendientes a la base de datos (crea/actualiza tablas).
+
+> Idea simple:  
+> `db init` = preparar el sistema de migraciones (como `git init`)  
+> `db migrate` = generar el “cambio” (como un commit)  
+> `db upgrade` = aplicar el cambio a la BD
+
+---
+
+## Script de ayuda: `migrate_all.py`
+
+Para no ejecutar 3 comandos cada vez, usamos `migrate_all.py`, que automatiza:
+
+1. `db init` (solo si no existe `migrations/`)
+2. `db migrate -m "<mensaje>"`
+3. `db upgrade`
+
+### Uso
+
+**Primera vez (proyecto nuevo):**
+```bash
+python migrate_all.py "init"
+
+
 ---
 
 ## 7) Autenticación JWT
