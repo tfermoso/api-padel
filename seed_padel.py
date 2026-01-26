@@ -3,7 +3,7 @@ from decimal import Decimal
 
 from app import create_app                  # si create_app está en app/__init__.py
 from app.extensions import db
-from app.models import Pista, Horario, Extra
+from app.models import Pista, Horario, Extra,Rol 
 
 
 def get_turno(hh_mm: str) -> str:
@@ -51,13 +51,20 @@ def seed_extras():
     if not Extra.query.filter_by(nombre="Fin de semana").first():
         db.session.add(Extra(nombre="Fin de semana", precio_extra=Decimal("3.00")))
 
+def seed_roles():
+    if not Rol.query.filter_by(nombre="admin").first():
+        db.session.add(Rol(nombre="admin"))
+    if not Rol.query.filter_by(nombre="usuario").first():
+        db.session.add(Rol(nombre="usuario"))
+
 
 def main():
     app = create_app()
     with app.app_context():
-        seed_pistas()
-        seed_horarios()
-        seed_extras()
+        #seed_pistas()
+        #seed_horarios()
+        #seed_extras()
+        seed_roles()
         db.session.commit()
         print("OK: datos iniciales cargados.")
 

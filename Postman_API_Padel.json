@@ -1,0 +1,866 @@
+{
+  "info": {
+    "name": "API Padel",
+    "description": "Colección completa de endpoints para API Padel (Auth, API y Admin)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Juan Perez\",\n  \"email\": \"juan@example.com\",\n  \"dni\": \"12345678A\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "  var jsonData = pm.response.json();",
+                  "  pm.environment.set(\"token\", jsonData.access_token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"juan@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Me",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/auth/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Change Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"old_password\": \"password123\",\n  \"new_password\": \"newpassword123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/change_password",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "change_password"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Image Profile",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "foto",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/update_image_profile",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "update_image_profile"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Account",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/delete",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "delete"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "API",
+      "item": [
+        {
+          "name": "Get Pistas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/pistas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "pistas"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Horarios",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/horarios",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "horarios"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Disponibilidad Pista",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pista_id\": 1,\n  \"fecha\": \"2026-02-15\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/disponibilidadpista",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "disponibilidadpista"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Disponibilidad Todas Pistas",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fecha\": \"2026-02-15\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/disponibilidad",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "disponibilidad"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Calcular Precio",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pista_id\": 1,\n  \"fecha\": \"2026-02-15\",\n  \"horario_ids\": [1, 2]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/calcular_precio",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "calcular_precio"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Mis Reservas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/mis_reservas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "mis_reservas"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Reservar",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pista_id\": 1,\n  \"fecha\": \"2026-02-15\",\n  \"horario_ids\": [1, 2]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/reservar",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "reservar"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Cancelar Reserva",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reserva_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/cancelar_reserva",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "cancelar_reserva"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin - Usuarios",
+      "item": [
+        {
+          "name": "Get Usuarios",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/usuarios",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "usuarios"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Usuario",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/usuarios/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "usuarios",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Usuario",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Juan Updated\",\n  \"email\": \"juan.updated@example.com\",\n  \"dni\": \"87654321B\",\n  \"rol_id\": 2\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/usuarios/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "usuarios",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Usuario",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/usuarios/2",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "usuarios",
+                "2"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin - Pistas",
+      "item": [
+        {
+          "name": "Crear Pista",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Pista Premium\",\n  \"cubierta\": true,\n  \"plazas\": 4,\n  \"precio_base\": 35.50\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/pistas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "pistas"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Pista",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Pista Premium Updated\",\n  \"cubierta\": false,\n  \"plazas\": 6,\n  \"precio_base\": 40.00\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/pistas/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "pistas",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Pista",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/pistas/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "pistas",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin - Horarios",
+      "item": [
+        {
+          "name": "Crear Horario",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"franja\": \"18:00-19:30\",\n  \"turno\": \"noche\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/horarios",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "horarios"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Horario",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"franja\": \"19:00-20:30\",\n  \"turno\": \"noche\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/horarios/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "horarios",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Horario",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/horarios/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "horarios",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin - Extras",
+      "item": [
+        {
+          "name": "Crear Extra",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Luz Led\",\n  \"precio_extra\": 5.50\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/extras",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "extras"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Extra",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombre\": \"Luz Led Premium\",\n  \"precio_extra\": 7.50\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/admin/extras/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "extras",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Extra",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/extras/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "extras",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin - Reservas",
+      "item": [
+        {
+          "name": "Get Todas Reservas",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/reservas",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "reservas"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Get Reserva Detalle",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/reservas/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "reservas",
+                "1"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Reserva",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/admin/reservas/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "admin",
+                "reservas",
+                "1"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}
