@@ -61,9 +61,9 @@ def seed_roles():
 def main():
     app = create_app()
     with app.app_context():
-        #seed_pistas()
-        #seed_horarios()
-        #seed_extras()
+        seed_pistas()
+        seed_horarios()
+        seed_extras()
         seed_roles()
         db.session.commit()
         print("OK: datos iniciales cargados.")
