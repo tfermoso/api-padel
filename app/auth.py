@@ -22,7 +22,6 @@ def register():
     if User.query.filter_by(email=email).first():
         return {"error": "email ya existe"}, 409
 
-    user = User(email=email, nombre=nombre, dni=dni, password=generate_password_hash(password),rol_id=1)
     db.session.add(user)
     db.session.commit()
     return {"id": user.id, "email": user.email, "nombre": user.nombre, "dni": user.dni, "rol_id": user.rol_id}, 201
@@ -39,7 +38,7 @@ def login():
 
     # identity como string para JWT
     token = create_access_token(identity=str(user.id))  # :contentReference[oaicite:7]{index=7}
-    return {"access_token": token}, 200
+    return {"access_token": token,"user":user.nombre,"rol": user.rol.nombre}, 200
 
 @auth_bp.post("/delete")
 def delete_account():
@@ -56,7 +55,7 @@ def delete_account():
 def me():
     user_id = int(get_jwt_identity())
     user = User.query.get_or_404(user_id)
-    return {"id": user.id, "email": user.email, "nombre": user.nombre, "dni": user.dni, "foto": user.foto,"rol_id": user.rol_id}, 200
+    return {"id": user.id, "email": user.email, "nombre": user.nombre, "dni": user.dni, "foto": user.foto,"rol_id": user.rol_id,"rol": user.rol.nombre}, 200
 
 @auth_bp.post("/change_password")
 @jwt_required() 
@@ -68,10 +67,10 @@ def change_password():
 
     user = User.query.get_or_404(user_id)
 
-    if not check_password_hash(user.password_hash, old_password):
+    if not check_password_hash(user.password, old_password):
         return {"error": "contraseña antigua incorrecta"}, 401
 
-    user.password_hash = generate_password_hash(new_password)
+    user.password = generate_password_hash(new_password)
     db.session.commit()
     return {"message": "contraseña actualizada"}, 200
 
@@ -81,24 +80,37 @@ def update_image_profile():
     user_id = int(get_jwt_identity())
     user = User.query.get_or_404(user_id)
 
+    # Debug: verificar qué se envía
     if "foto" not in request.files:
-        return {"error": "no se ha enviado ninguna imagen"}, 400
+        return {"error": "no se ha enviado ninguna imagen en 'foto'", "keys_recibidas": list(request.files.keys())}, 400
 
     file = request.files["foto"]
+    
+    # Debug completo
+    print(f"DEBUG: file = {file}")
+    print(f"DEBUG: file.filename = {file.filename}")
+    print(f"DEBUG: bool(file) = {bool(file)}")
+    print(f"DEBUG: hasattr filename = {hasattr(file, 'filename')}")
+    
+    filename = file.filename.strip() if file.filename else ""
+    
+    if not filename or filename == "":
+        return {"error": "filename vacío", "filename_recibido": f"'{file.filename}'", "tipo_file": str(type(file))}, 400
 
-    if file.filename == "":
-        return {"error": "nombre de archivo vacío"}, 400
+    if not allowed_file(filename):
+        return {"error": "tipo de archivo no permitido", "archivo": filename}, 400
 
-    if not allowed_file(file.filename):
-        return {"error": "tipo de archivo no permitido"}, 400
+    try:
+        safe_filename = make_safe_filename(filename)
+        ensure_folder(current_app.config["UPLOAD_FOLDER"])
+        filepath = os.path.join(current_app.config["UPLOAD_FOLDER"], safe_filename)
+        file.save(filepath)
 
-    filename = make_safe_filename(file.filename)
-    ensure_folder(current_app.config["UPLOAD_FOLDER"])
-    filepath = os.path.join(current_app.config["UPLOAD_FOLDER"], filename)
-    file.save(filepath)
+        user.foto = safe_filename
+        db.session.commit()
 
-    # Actualizar la ruta de la foto en el usuario
-    user.foto = filename
-    db.session.commit()
-
-    return {"message": "imagen de perfil actualizada", "foto": filename}, 200
+        return {"message": "imagen de perfil actualizada", "foto": safe_filename}, 200
+    
+    except Exception as e:
+        db.session.rollback()
+        return {"error": "error al guardar la imagen", "detail": str(e)}, 500

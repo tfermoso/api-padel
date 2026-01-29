@@ -27,7 +27,6 @@ def get_pistas():
             "id": pista.id,
             "nombre": pista.nombre,
             "cubierta": pista.cubierta,
-            "precio_hora": str(pista.precio_base),  # alias para el cliente
             "precio_base": str(pista.precio_base),
             "plazas": getattr(pista, "plazas", None),
         })
