@@ -21,7 +21,13 @@ def register():
 
     if User.query.filter_by(email=email).first():
         return {"error": "email ya existe"}, 409
-
+    user = User(
+            name=nombre,
+            email=email,
+            password_hash=generate_password_hash(password),
+            rol_id=1,
+            dni=dni
+        )
     db.session.add(user)
     db.session.commit()
     return {"id": user.id, "email": user.email, "nombre": user.nombre, "dni": user.dni, "rol_id": user.rol_id}, 201

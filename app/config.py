@@ -1,7 +1,9 @@
 import os
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent  # .../api-padel
+BASE_DIR = Path(__file__).resolve().parent.parent          # .../api-padel
+INSTANCE_DIR = BASE_DIR / "instance"                      # .../api-padel/instance
+INSTANCE_DIR.mkdir(parents=True, exist_ok=True)           # opcional: asegura que exista
 
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "dev")
@@ -9,11 +11,11 @@ class Config:
 
     db_url = os.getenv("DATABASE_URL", "sqlite:///padel.db")
 
-    # si es sqlite relativa: sqlite:///padel.db -> sqlite:////home/.../api-padel/padel.db
+    # sqlite relativa: sqlite:///padel.db  -> usar .../instance/padel.db
     if db_url.startswith("sqlite:///") and not db_url.startswith("sqlite:////"):
-        filename = db_url.replace("sqlite:///", "", 1)
-        db_path = (BASE_DIR / filename).resolve()
-        SQLALCHEMY_DATABASE_URI = f"sqlite:///{db_path.as_posix()}"
+        filename = db_url[len("sqlite:///"):]             # "padel.db"
+        db_path = (INSTANCE_DIR / filename).resolve()
+        SQLALCHEMY_DATABASE_URI = "sqlite:///" + db_path.as_posix()
     else:
         SQLALCHEMY_DATABASE_URI = db_url
 

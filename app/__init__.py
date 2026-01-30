@@ -29,6 +29,6 @@ def create_app():
 
     @app.route("/")
     def index():
-        return {"message": "API Padel funcionando!"}
+        return {"message": "API Padel funcionando en local!"}
 
     return app
